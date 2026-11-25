@@ -19,9 +19,7 @@ class bankAccount{
     string getName(){
         return name;
     }
-    int getBalance(){
-        return balance;
-    }
+    
     void setBalance(int b){
         balance= b;
     }
@@ -215,9 +213,6 @@ class bank{
             }
             cout<<"account not found"<<endl;
         }
-
-        
-    
     void bankMenu(){
         int choice;
         choice=0;
