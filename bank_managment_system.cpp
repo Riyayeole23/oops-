@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 using namespace std;
+class bank;
 class bankAccount{
     private:
     int accNumber;
@@ -18,6 +19,9 @@ class bankAccount{
     }
     string getName(){
         return name;
+    }
+    int getBalance(){
+        return balance;
     }
     
     void setBalance(int b){
@@ -102,6 +106,7 @@ class bankAccount{
     
         cout<<"thankyou!! visit again"<<endl;
     }
+   
     void bankMenu(){
         int choice;
         choice=0;
@@ -134,6 +139,7 @@ class bankAccount{
                     break;
                 case 6:
                     showTransactions();
+                    break;
                 case 7:
                     cout<<"tankyou!! visit again"<<endl;
                     break;
@@ -212,14 +218,87 @@ class bank{
                 }
             }
             cout<<"account not found"<<endl;
+    }
+    
+    void transferMoney(){
+        
+        int senderAccNO;
+        int receiverAccNo;
+        int amount;
+        int senderIndex=-1;
+        int receiverIndex=-1;
+        while(senderIndex==-1){
+            cout<<"enter sender's account number"<<endl;
+            cin>>senderAccNO;
+            for(int i=0; i<Accounts.size(); i++){
+                if(Accounts[i].getaccNumber()==senderAccNO){
+                senderIndex=i;
+            }
         }
-    void bankMenu(){
+        if(senderIndex==-1){
+            cout<<"account not found"<<endl;
+        }
+    }
+    
+        while(receiverIndex==-1){
+            cout<<"enter receiver's account number"<<endl;
+            cin>>receiverAccNo;
+            if(senderAccNO==receiverAccNo){
+                cout<<"can't transfer money to same account"<<endl;
+                continue;
+        }
+            for(int i=0; i<Accounts.size(); i++){
+                if(Accounts[i].getaccNumber()==receiverAccNo){
+                    receiverIndex=i;
+                    break;
+            }
+        }
+            if(receiverIndex==-1){
+                cout<<"account not found"<<endl;
+                return;
+            }
+        }
+        
+            
+            cout<<"enter amount to tranfer"<<endl;
+            cin>>amount;
+            if(amount>0 && amount<=Accounts[senderIndex].getBalance()){
+                Accounts[senderIndex].setBalance(Accounts[senderIndex].getBalance()-amount);
+                Accounts[receiverIndex].setBalance(Accounts[receiverIndex].getBalance()+amount);
+
+            }
+            else{
+                cout<<"invalid amount or insufficient balance"<<endl;
+            }
+            cout<<"money transferred successfully"<<endl;
+            cout<<"balance of account "<<Accounts[senderIndex].getaccNumber() <<"is "<< Accounts[senderIndex].getBalance() << endl;
+            cout<<"balance of account "<<Accounts[receiverIndex].getaccNumber() <<"is "<< Accounts[receiverIndex].getBalance() << endl;
+        
+        }
+    void deleteAccount(){
+        int delete_acc;
+        cout<<"enter account number to delete"<<endl;
+        cin>>delete_acc;
+        for(int i=0; i<Accounts.size(); i++){
+            if(delete_acc==Accounts[i].getaccNumber()){
+                Accounts.erase(Accounts.begin()+i);
+                cout<<"account deleted successfully"<<endl;
+                return;
+            }
+        }
+                cout<<"account not found"<<endl;
+    }
+            
+        
+    void bankMenu() {
         int choice;
         choice=0;
-        while(choice!=3){
+        while(choice!=5){
             cout<<"1.create new account"<<endl;
             cout<<"2.open existing account"<<endl;
-            cout<<"exit from bank menu"<<endl;
+            cout<<"3.transfer money"<<endl;
+            cout<<"4.delete account"<<endl;
+            cout<<"5.exit from bank menu"<<endl;
             cout<<"enter choice"<<endl;
             cin>>choice;
             switch(choice){
@@ -230,6 +309,10 @@ class bank{
                 openAccount();
                 break;
                 case 3:
+                transferMoney();
+                case 4:
+                deleteAccount();
+                case 5:
                 cout<<"thankyou!! visit again"<<endl;
                 break;
                 default:
@@ -237,9 +320,11 @@ class bank{
             }
         }
     }
+};
+
    
         
-};
+
 int main(){
     bank b;
     b.bankMenu();
